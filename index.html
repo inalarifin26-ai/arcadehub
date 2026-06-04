@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArcadeHub — Play & Earn Rewards</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pk:#F7C4D4;--pk2:#F0A0BC;--pk3:#D4537E;--pkt:#72243E;
+  --lv:#DDD8F8;--lv2:#C4BCE8;--lv3:#9F96D8;--lvt:#3C3489;
+  --mt:#C8EEE0;--mt2:#9FD9C0;--mt3:#5DBFA0;--mtt:#085041;
+  --am:#FAC775;--amt:#412402;
+  --cr:#FDF8F4;--wh:#FFFFFF;
+  --t1:#2C2C2A;--t2:#5F5E5A;--t3:#888780;
+  --bd:rgba(0,0,0,0.09);
+  --r:12px;--rs:8px;
+}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--cr);color:var(--t1);min-height:100vh}
+.page{display:none;min-height:100vh;flex-direction:column}
+.page.active{display:flex}
+
+nav{background:var(--wh);border-bottom:1px solid var(--bd);padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.nav-logo{font-size:17px;font-weight:600;color:var(--pkt);cursor:pointer;display:flex;align-items:center;gap:6px}
+.logo-badge{background:var(--pk);padding:3px 10px;border-radius:20px;font-size:14px}
+.nav-mid{display:flex;gap:2px}
+.nb{background:none;border:none;padding:7px 11px;border-radius:var(--rs);cursor:pointer;font-size:13px;color:var(--t2);transition:all 0.2s}
+.nb:hover,.nb.on{background:var(--lv);color:var(--lvt)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.pts-chip{background:var(--mt);color:var(--mtt);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer}
+.av-btn{width:34px;height:34px;border-radius:50%;border:2px solid var(--pk);background:var(--pk);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+.hero{background:linear-gradient(135deg,#FFF0F5 0%,#EEEAFF 50%,#E8F7F0 100%);padding:36px 24px 32px;text-align:center}
+.hero h1{font-size:28px;font-weight:600;color:var(--pkt);margin-bottom:6px}
+.hero p{color:var(--t2);font-size:14px;margin-bottom:20px}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.chip{background:var(--wh);border:1px solid var(--bd);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--t2)}
+.chip b{color:var(--pkt)}
+
+.sec{padding:24px 20px}
+.sec-title{font-size:16px;font-weight:600;margin-bottom:4px}
+.sec-sub{font-size:13px;color:var(--t3);margin-bottom:16px}
+
+.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.gcard{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:18px;text-align:center;transition:all 0.2s}
+.gcard:hover{border-color:var(--pk2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.07)}
+.gi{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px}
+.gt{font-size:14px;font-weight:600;margin-bottom:3px}
+.gd{font-size:11px;color:var(--t3);margin-bottom:10px}
+.gp{font-size:11px;color:var(--mtt);background:var(--mt);padding:2px 9px;border-radius:8px;display:inline-block;margin-bottom:10px}
+.pbtn{width:100%;padding:8px;border-radius:var(--rs);border:none;background:var(--pk);color:var(--pkt);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.pbtn:hover{background:var(--pk2)}
+
+.lb-wrap{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.lr{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bd)}
+.lr:last-child{border-bottom:none}
+.lrank{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.lname{flex:1;font-size:13px}
+.lpts{font-size:12px;font-weight:600;color:var(--mtt)}
+
+.btn1{padding:9px 20px;border-radius:var(--rs);border:none;background:var(--pk);color:var(--pkt);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn1:hover{background:var(--pk2)}
+.btn2{padding:9px 20px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--wh);color:var(--t2);font-size:13px;cursor:pointer;transition:all 0.2s}
+.btn2:hover{background:var(--lv);color:var(--lvt)}
+.btn-mint{padding:9px 20px;border-radius:var(--rs);border:none;background:var(--mt);color:var(--mtt);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn-mint:hover{background:var(--mt2)}
+
+/* GAME */
+.game-header{background:var(--wh);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.game-header h2{flex:1;font-size:15px;font-weight:600;min-width:120px}
+.sc-badge{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+.game-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;background:linear-gradient(135deg,#FDF0F4,#EEE9FF);min-height:320px}
+canvas{border-radius:var(--r);border:1px solid var(--bd);background:var(--wh);max-width:100%;touch-action:none;display:block}
+.game-ctrl{background:var(--wh);border-top:1px solid var(--bd);padding:10px 20px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.touch-ctrl{display:none;background:var(--wh);border-top:1px solid var(--bd);padding:14px 20px}
+.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:4px;margin:0 auto;width:fit-content}
+.dpad-btn{width:52px;height:52px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--cr);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;user-select:none;-webkit-user-select:none}
+.dpad-btn:active{background:var(--lv);transform:scale(0.92)}
+.dpad-empty{width:52px;height:52px}
+.slide-ctrl{display:flex;gap:12px}
+.slide-btn{flex:1;height:54px;border-radius:var(--rs);border:1px solid var(--bd);background:var(--cr);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;user-select:none;-webkit-user-select:none;font-size:14px;font-weight:600;color:var(--t2);gap:6px}
+.slide-btn:active{background:var(--lv);color:var(--lvt)}
+
+/* REDEEM */
+.redeem-hero{background:linear-gradient(135deg,#EEE9FF,#E8F7F0);padding:28px 24px;text-align:center}
+.redeem-hero h1{font-size:22px;font-weight:600;color:var(--lvt)}
+.pts-big-wrap{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:16px 24px;display:inline-flex;flex-direction:column;align-items:center;margin-top:14px}
+.pts-big{font-size:36px;font-weight:700;color:var(--pkt)}
+.pts-lbl{font-size:12px;color:var(--t3)}
+.rtabs{display:flex;border-bottom:1px solid var(--bd);background:var(--wh);padding:0 20px;overflow-x:auto}
+.rtab{padding:11px 16px;border:none;background:none;font-size:13px;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;white-space:nowrap}
+.rtab.on{color:var(--lvt);border-bottom-color:var(--lv3)}
+.rcontent{padding:20px;max-width:720px}
+.cat-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.ctab{padding:6px 14px;border-radius:20px;border:1px solid var(--bd);background:var(--wh);font-size:12px;color:var(--t2);cursor:pointer;transition:all 0.2s}
+.ctab.on{background:var(--lv);color:var(--lvt);border-color:var(--lv2)}
+.rw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.rw{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:14px;text-align:center;transition:all 0.2s}
+.rw:hover{border-color:var(--lv2)}
+.rw-icon{font-size:28px;margin-bottom:8px}
+.rw-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.rw-cat{font-size:10px;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.rw-pts{font-size:11px;color:var(--t3);margin-bottom:10px}
+.rw-btn{width:100%;padding:6px;border-radius:var(--rs);border:none;font-size:12px;cursor:pointer;transition:all 0.2s;font-weight:600}
+.rw-btn.ok{background:var(--lv);color:var(--lvt)}
+.rw-btn.ok:hover{background:var(--lv2)}
+.rw-btn.no{background:var(--cr);color:var(--t3);cursor:not-allowed}
+.rw-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;margin-bottom:6px;font-weight:600}
+.vbox{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:20px;max-width:380px}
+.vbox h3{font-size:14px;font-weight:600;margin-bottom:4px}
+.vbox p{font-size:12px;color:var(--t3);margin-bottom:14px}
+.vi-row{display:flex;gap:8px}
+.vi{flex:1;padding:9px 12px;border:1px solid var(--bd);border-radius:var(--rs);font-size:14px;font-family:inherit;letter-spacing:2px;text-transform:uppercase;outline:none}
+.vi:focus{border-color:var(--lv3)}
+.demo-codes{background:var(--lv);border-radius:var(--r);padding:14px;max-width:380px;margin-top:16px}
+.demo-codes .dtitle{font-size:12px;font-weight:600;color:var(--lvt);margin-bottom:8px}
+code{background:rgba(255,255,255,0.7);padding:2px 7px;border-radius:4px;font-size:11px;color:var(--lvt);font-family:monospace}
+.hist-list{display:flex;flex-direction:column;gap:8px}
+.hi{background:var(--wh);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.hi-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.hi-text{flex:1}
+.hi-title{font-size:13px;font-weight:600}
+.hi-date{font-size:11px;color:var(--t3)}
+.hi-pts{font-size:13px;font-weight:700}
+
+/* TOPUP & MERCH PAGE */
+.shop-hero{background:linear-gradient(135deg,#FFF0F5,#FAC775,#E8F7F0);padding:28px 24px;text-align:center}
+.shop-hero h1{font-size:22px;font-weight:700;color:var(--pkt)}
+.shop-hero p{font-size:13px;color:var(--t2);margin-top:4px}
+.shop-balance{display:inline-flex;gap:20px;background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:14px 24px;margin-top:14px;flex-wrap:wrap;justify-content:center}
+.shop-bal-item{text-align:center}
+.shop-bal-n{font-size:24px;font-weight:700;color:var(--pkt)}
+.shop-bal-l{font-size:11px;color:var(--t3)}
+.shop-tabs{display:flex;border-bottom:1px solid var(--bd);background:var(--wh);padding:0 20px;overflow-x:auto}
+.stab{padding:11px 18px;border:none;background:none;font-size:13px;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;white-space:nowrap;font-weight:500}
+.stab.on{color:var(--pkt);border-bottom-color:var(--pk3)}
+.shop-content{padding:20px;max-width:760px}
+
+/* TOPUP */
+.topup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.topup-card{background:var(--wh);border:2px solid var(--bd);border-radius:var(--r);padding:18px;text-align:center;cursor:pointer;transition:all 0.2s}
+.topup-card:hover{border-color:var(--pk2);transform:translateY(-2px)}
+.topup-card.selected{border-color:var(--pk3);background:#FFF5F8}
+.topup-pts{font-size:28px;font-weight:700;color:var(--pkt)}
+.topup-pts-lbl{font-size:11px;color:var(--t3);margin-bottom:8px}
+.topup-price{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:4px}
+.topup-bonus{font-size:10px;background:var(--mt);color:var(--mtt);padding:2px 8px;border-radius:8px;display:inline-block;font-weight:600}
+.topup-method{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:16px}
+.topup-method h3{font-size:13px;font-weight:600;color:var(--t2);margin-bottom:12px}
+.method-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+.method-opt{background:var(--cr);border:2px solid var(--bd);border-radius:var(--rs);padding:10px 8px;text-align:center;cursor:pointer;transition:all 0.2s;font-size:12px;font-weight:500;color:var(--t2)}
+.method-opt:hover{border-color:var(--pk2)}
+.method-opt.sel{border-color:var(--pk3);background:#FFF5F8;color:var(--pkt)}
+.method-icon{font-size:20px;display:block;margin-bottom:4px}
+.topup-summary{background:linear-gradient(135deg,#FFF0F5,#EEEAFF);border-radius:var(--r);padding:16px;margin-bottom:16px}
+.topup-summary h3{font-size:13px;font-weight:600;color:var(--lvt);margin-bottom:10px}
+.sum-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;color:var(--t2)}
+.sum-row.total{font-weight:700;color:var(--t1);font-size:15px;padding-top:8px;border-top:1px solid var(--bd);margin-top:8px}
+
+/* MERCH */
+.merch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.merch-card{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;transition:all 0.2s}
+.merch-card:hover{border-color:var(--pk2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+.merch-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:52px}
+.merch-body{padding:14px}
+.merch-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.merch-desc{font-size:11px;color:var(--t3);margin-bottom:10px;line-height:1.5}
+.merch-price-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.merch-price{font-size:15px;font-weight:700;color:var(--pkt)}
+.merch-pts{font-size:11px;color:var(--mtt);background:var(--mt);padding:2px 8px;border-radius:8px;font-weight:600}
+.merch-stock{font-size:10px;color:var(--t3)}
+.merch-var{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.var-opt{padding:4px 10px;border-radius:6px;border:1px solid var(--bd);font-size:11px;cursor:pointer;transition:all 0.2s;background:var(--cr);color:var(--t2)}
+.var-opt:hover,.var-opt.sel{border-color:var(--pk3);background:var(--pk);color:var(--pkt)}
+.merch-btn{width:100%;padding:8px;border-radius:var(--rs);border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.merch-btn.cash{background:var(--pk);color:var(--pkt)}
+.merch-btn.cash:hover{background:var(--pk2)}
+.merch-btn.pts{background:var(--lv);color:var(--lvt);margin-top:6px}
+.merch-btn.pts:hover{background:var(--lv2)}
+.merch-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600;margin-bottom:8px}
+
+/* CART */
+.cart-btn-wrap{position:fixed;bottom:20px;right:20px;z-index:90}
+.cart-btn{width:52px;height:52px;border-radius:50%;background:var(--pk3);color:var(--wh);border:none;font-size:22px;cursor:pointer;box-shadow:0 4px 16px rgba(212,83,126,0.4);display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.cart-btn:hover{transform:scale(1.08)}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:#E24B4A;color:var(--wh);width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* PROFILE */
+.prof-hero{background:linear-gradient(135deg,#FFF0F5,#EEEAFF);padding:32px 24px;text-align:center}
+.av-big{width:80px;height:80px;border-radius:50%;border:3px solid var(--pk);background:var(--wh);font-size:40px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;cursor:pointer;transition:all 0.2s}
+.av-big:hover{border-color:var(--pk3)}
+.prof-name-h{font-size:20px;font-weight:600;color:var(--pkt)}
+.prof-sub{font-size:13px;color:var(--t2);margin-top:2px}
+.prof-stats{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.pstat{background:var(--wh);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 20px;text-align:center;min-width:90px}
+.pstat-n{font-size:22px;font-weight:700;color:var(--pkt)}
+.pstat-l{font-size:11px;color:var(--t3)}
+.prof-content{padding:20px;max-width:500px}
+.prof-section{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.prof-section h3{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--t2)}
+.form-row{margin-bottom:12px}
+.form-row label{font-size:12px;color:var(--t3);display:block;margin-bottom:4px}
+.form-input{width:100%;padding:8px 12px;border:1px solid var(--bd);border-radius:var(--rs);font-size:14px;font-family:inherit;outline:none;background:var(--wh);color:var(--t1)}
+.form-input:focus{border-color:var(--lv3)}
+.av-picker{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+.av-opt{font-size:22px;width:42px;height:42px;border-radius:50%;border:2px solid var(--bd);background:var(--cr);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.av-opt:hover,.av-opt.sel{border-color:var(--pk3);background:var(--pk)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:11px 20px;font-size:13px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(0,0,0,0.12);transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);z-index:9999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:500;align-items:center;justify-content:center;padding:20px}
+.overlay.show{display:flex}
+.modal{background:var(--wh);border-radius:var(--r);padding:28px;max-width:360px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.15)}
+.modal h2{font-size:18px;font-weight:600;margin-bottom:6px;color:var(--pkt)}
+.modal p{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.6}
+.modal-pts{font-size:36px;font-weight:700;color:var(--mtt);margin-bottom:4px}
+.modal-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* CONFIRM MODAL */
+.confirm-modal{background:var(--wh);border-radius:var(--r);padding:24px;max-width:340px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.15)}
+.confirm-modal h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--t1)}
+.confirm-modal p{font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.6}
+.confirm-item{background:var(--cr);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.confirm-item-icon{font-size:28px}
+.confirm-item-info{flex:1}
+.confirm-item-name{font-size:14px;font-weight:600}
+.confirm-item-sub{font-size:12px;color:var(--t3)}
+
+/* SETUP */
+.setup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.setup-modal{background:var(--wh);border-radius:16px;padding:32px 28px;max-width:400px;width:100%;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,0.2)}
+.setup-modal h2{font-size:22px;font-weight:700;color:var(--pkt);margin-bottom:8px}
+.setup-modal p{font-size:13px;color:var(--t2);margin-bottom:20px}
+.setup-av-big{font-size:52px;margin:4px 0 16px;cursor:pointer;display:block;line-height:1;transition:transform 0.2s}
+.setup-av-big:hover{transform:scale(1.1)}
+.setup-av-hint{font-size:11px;color:var(--t3);margin-bottom:16px}
+
+@media(max-width:600px){
+  .nav-mid{display:none}
+  .hero h1{font-size:22px}
+  .game-grid{grid-template-columns:1fr 1fr}
+  .rw-grid{grid-template-columns:1fr 1fr}
+  .merch-grid{grid-template-columns:1fr 1fr}
+  .touch-ctrl{display:block}
+  .prof-stats{gap:8px}
+  .pstat{padding:10px 14px;min-width:80px}
+  .topup-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:400px){
+  .game-grid{grid-template-columns:1fr}
+  .rw-grid{grid-template-columns:1fr}
+  .merch-grid{grid-template-columns:1fr}
+  .topup-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"><span class="tdot" id="tdot"></span><span id="tmsg"></span></div>
+
+<!-- GAME OVER MODAL -->
+<div id="overlay" class="overlay">
+  <div class="modal">
+    <div class="modal-pts" id="m-pts"></div>
+    <h2 id="m-title">Game Over!</h2>
+    <p id="m-desc"></p>
+    <div class="modal-btns">
+      <button class="btn2" id="m-home">🏠 Kembali</button>
+      <button class="btn1" id="m-again">▶ Main Lagi</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="confirm-overlay" class="overlay">
+  <div class="confirm-modal">
+    <h3 id="conf-title">Konfirmasi Pembelian</h3>
+    <div class="confirm-item">
+      <div class="confirm-item-icon" id="conf-icon">🛍️</div>
+      <div class="confirm-item-info">
+        <div class="confirm-item-name" id="conf-name">Item</div>
+        <div class="confirm-item-sub" id="conf-sub">Detail</div>
+      </div>
+    </div>
+    <p id="conf-desc">Apakah kamu yakin ingin melanjutkan?</p>
+    <div class="modal-btns">
+      <button class="btn2" onclick="closeConfirm()">Batal</button>
+      <button class="btn1" id="conf-ok">Ya, Lanjutkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETUP OVERLAY -->
+<div id="setup-overlay" class="setup-overlay">
+  <div class="setup-modal">
+    <span class="setup-av-big" id="setup-av-big">🦊</span>
+    <div class="setup-av-hint">Klik avatar untuk mengganti</div>
+    <h2>Welcome to ArcadeHub! 🎮</h2>
+    <p>Buat profil pemainmu untuk mulai bermain dan kumpulkan poin</p>
+    <div class="form-row" style="text-align:left">
+      <label>Username kamu</label>
+      <input class="form-input" id="setup-name" placeholder="Masukkan username..." maxlength="18">
+    </div>
+    <div style="text-align:left;margin-bottom:20px">
+      <label style="font-size:12px;color:var(--t3);display:block;margin-bottom:8px">Pilih avatar</label>
+      <div class="av-picker" id="setup-av-grid"></div>
+    </div>
+    <button class="btn1" id="setup-submit" style="width:100%;padding:12px;font-size:15px">Let's Play! 🎮</button>
+    <div id="setup-err" style="margin-top:10px;font-size:12px;color:#A32D2D;display:none">⚠️ Masukkan username dulu ya!</div>
+  </div>
+</div>
+
+<!-- ══════════════════ HOME PAGE ══════════════════ -->
+<div id="page-home" class="page active">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div>
+    <div class="nav-mid">
+      <button class="nb on" id="nb-home" onclick="goHome()">Home</button>
+      <button class="nb" id="nb-shop" onclick="goShop()">🛍️ Shop</button>
+      <button class="nb" id="nb-redeem" onclick="goRedeem()">Redeem</button>
+      <button class="nb" id="nb-profile" onclick="goProfile()">Profile</button>
+    </div>
+    <div class="nav-right">
+      <div class="pts-chip" onclick="goRedeem()">🪙 <span class="pts-display">0</span></div>
+      <div class="av-btn" id="nav-av" onclick="goProfile()">🦊</div>
+    </div>
+  </nav>
+  <div class="hero">
+    <h1>Play &amp; Earn Rewards 🎮</h1>
+    <p>Main game, kumpulkan poin, belanja merchandise keren!</p>
+    <div class="hero-chips">
+      <div class="chip">🎮 3 Games</div>
+      <div class="chip">🪙 <b class="pts-display">0</b> pts</div>
+      <div class="chip">🛍️ Shop Tersedia</div>
+      <div class="chip">🎁 12 Rewards</div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-title">Pilih Game</div>
+    <div class="sec-sub">Skor lebih tinggi = lebih banyak poin!</div>
+    <div class="game-grid">
+      <div class="gcard">
+        <div class="gi" style="background:#FFF0F4">🐍</div>
+        <div class="gt">Snake Classic</div>
+        <div class="gd">Makan makanan, tumbuh panjang, hindari tembok!</div>
+        <div class="gp">Up to 500 pts</div>
+        <button class="pbtn" onclick="startGame('snake')">▶ Main</button>
+      </div>
+      <div class="gcard">
+        <div class="gi" style="background:#EEE9FF">🧱</div>
+        <div class="gt">Brick Breaker</div>
+        <div class="gd">Hancurkan semua bata dengan bola dan papan!</div>
+        <div class="gp">Up to 600 pts</div>
+        <button class="pbtn" onclick="startGame('brick')">▶ Main</button>
+      </div>
+      <div class="gcard">
+        <div class="gi" style="background:#E8F7F0">⭐</div>
+        <div class="gt">Star Catcher</div>
+        <div class="gd">Tangkap bintang jatuh, hindari bom!</div>
+        <div class="gp">Up to 400 pts</div>
+        <button class="pbtn" onclick="startGame('catch')">▶ Main</button>
+      </div>
+    </div>
+  </div>
+  <div class="sec" style="padding-top:0">
+    <div class="sec-title">Leaderboard</div>
+    <div class="sec-sub">Top pemain minggu ini</div>
+    <div class="lb-wrap">
+      <div class="lr"><div class="lrank" style="background:#FAC775;color:#412402">1</div><span style="font-size:16px;margin-right:2px">🐺</span><div class="lname">WolfGamer</div><div class="lpts">4,820 pts</div></div>
+      <div class="lr"><div class="lrank" style="background:#D3D1C7;color:#2C2C2A">2</div><span style="font-size:16px;margin-right:2px">🦁</span><div class="lname">LionKing</div><div class="lpts">3,540 pts</div></div>
+      <div class="lr"><div class="lrank" style="background:#F5C4B3;color:#4A1B0C">3</div><span style="font-size:16px;margin-right:2px">🐯</span><div class="lname">TigerPro</div><div class="lpts">2,910 pts</div></div>
+      <div class="lr"><div class="lrank" style="background:#F1EFE8;color:#5F5E5A">4</div><span style="font-size:16px;margin-right:2px">🦅</span><div class="lname">EagleEye</div><div class="lpts">2,100 pts</div></div>
+      <div class="lr" id="my-lb-row" style="display:none">
+        <div class="lrank" style="background:var(--lv);color:var(--lvt)">You</div>
+        <span style="font-size:16px;margin-right:2px" id="my-lb-av">🦊</span>
+        <div class="lname" style="color:var(--lvt);font-weight:600" id="my-lb-name">You</div>
+        <div class="lpts" id="my-lb-pts">0 pts</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ GAME PAGE ══════════════════ -->
+<div id="page-game" class="page">
+  <nav>
+    <div class="nav-logo" onclick="leaveGame()"><span class="logo-badge">🎮</span> ArcadeHub</div>
+    <div class="nav-mid"><button class="nb" onclick="leaveGame()">← Kembali</button></div>
+    <div class="nav-right">
+      <div class="pts-chip">🪙 <span class="pts-display">0</span></div>
+      <div class="av-btn" id="game-av">🦊</div>
+    </div>
+  </nav>
+  <div style="flex:1;display:flex;flex-direction:column">
+    <div class="game-header">
+      <h2 id="gtitle">Game</h2>
+      <div class="sc-badge" style="background:var(--mt);color:var(--mtt)">Score: <span id="live-score">0</span></div>
+      <div class="sc-badge" style="background:var(--lv);color:var(--lvt)">Best: <span id="best-score">0</span></div>
+    </div>
+    <div class="game-wrap"><canvas id="gc" width="320" height="320"></canvas></div>
+    <div class="game-ctrl">
+      <button class="btn2" id="btn-pause" onclick="togglePause()" style="display:none">⏸ Pause</button>
+      <button class="btn1" id="btn-start" onclick="startNow()">▶ Start</button>
+      <button class="btn2" onclick="leaveGame()">🏠 Home</button>
+    </div>
+    <div class="touch-ctrl" id="touch-ctrl">
+      <div id="dpad-wrap" class="dpad">
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="tc-up">▲</button>
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="tc-left">◀</button>
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="tc-right">▶</button>
+        <div class="dpad-empty"></div>
+        <button class="dpad-btn" id="tc-down">▼</button>
+        <div class="dpad-empty"></div>
+      </div>
+      <div id="slide-wrap" class="slide-ctrl" style="display:none">
+        <button class="slide-btn" id="tc-sleft">◀ Kiri</button>
+        <button class="slide-btn" id="tc-sright">Kanan ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SHOP PAGE ══════════════════ -->
+<div id="page-shop" class="page">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div>
+    <div class="nav-mid">
+      <button class="nb" onclick="goHome()">Home</button>
+      <button class="nb on" id="sb-shop">🛍️ Shop</button>
+      <button class="nb" onclick="goRedeem()">Redeem</button>
+      <button class="nb" onclick="goProfile()">Profile</button>
+    </div>
+    <div class="nav-right">
+      <div class="pts-chip">🪙 <span class="pts-display">0</span></div>
+      <div class="av-btn" id="shop-av" onclick="goProfile()">🦊</div>
+    </div>
+  </nav>
+  <div class="shop-hero">
+    <h1>🛍️ ArcadeHub Shop</h1>
+    <p>Topup poin & beli merchandise eksklusif</p>
+    <div class="shop-balance">
+      <div class="shop-bal-item">
+        <div class="shop-bal-n pts-display">0</div>
+        <div class="shop-bal-l">🪙 Poin</div>
+      </div>
+      <div class="shop-bal-item">
+        <div class="shop-bal-n" id="shop-balance-rp">Rp 0</div>
+        <div class="shop-bal-l">💳 Saldo</div>
+      </div>
+    </div>
+  </div>
+  <div class="shop-tabs">
+    <button class="stab on" id="stab-topup" onclick="switchShopTab('topup')">💳 Topup Poin</button>
+    <button class="stab" id="stab-merch" onclick="switchShopTab('merch')">👕 Merchandise</button>
+    <button class="stab" id="stab-orders" onclick="switchShopTab('orders')">📦 Pesanan</button>
+  </div>
+
+  <!-- TOPUP TAB -->
+  <div id="stab-topup-content" class="shop-content">
+    <div class="sec-title" style="margin-bottom:4px">Pilih Nominal Topup</div>
+    <div class="sec-sub" style="margin-bottom:16px">Poin langsung masuk setelah pembayaran</div>
+    <div class="topup-grid" id="topup-grid"></div>
+    <div class="topup-method">
+      <h3>Metode Pembayaran</h3>
+      <div class="method-grid" id="method-grid"></div>
+    </div>
+    <div class="topup-summary" id="topup-summary" style="display:none">
+      <h3>Ringkasan</h3>
+      <div class="sum-row"><span>Poin</span><span id="sum-pts">—</span></div>
+      <div class="sum-row"><span>Bonus</span><span id="sum-bonus" style="color:var(--mtt)">—</span></div>
+      <div class="sum-row"><span>Metode</span><span id="sum-method">—</span></div>
+      <div class="sum-row total"><span>Total Bayar</span><span id="sum-total">—</span></div>
+    </div>
+    <button class="btn1" id="topup-btn" onclick="doTopup()" style="width:100%;padding:12px;font-size:14px;display:none">💳 Bayar Sekarang</button>
+  </div>
+
+  <!-- MERCH TAB -->
+  <div id="stab-merch-content" class="shop-content" style="display:none">
+    <div class="sec-title" style="margin-bottom:4px">Merchandise Eksklusif</div>
+    <div class="sec-sub" style="margin-bottom:16px">Bayar dengan uang atau tukar poin!</div>
+    <div class="merch-grid" id="merch-grid"></div>
+  </div>
+
+  <!-- ORDERS TAB -->
+  <div id="stab-orders-content" class="shop-content" style="display:none">
+    <div class="hist-list" id="orders-list">
+      <div style="color:var(--t3);font-size:13px;text-align:center;padding:40px 0">Belum ada pesanan</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ REDEEM PAGE ══════════════════ -->
+<div id="page-redeem" class="page">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div>
+    <div class="nav-mid">
+      <button class="nb" onclick="goHome()">Home</button>
+      <button class="nb" onclick="goShop()">🛍️ Shop</button>
+      <button class="nb on" id="rb-redeem">Redeem</button>
+      <button class="nb" onclick="goProfile()">Profile</button>
+    </div>
+    <div class="nav-right">
+      <div class="pts-chip">🪙 <span class="pts-display">0</span></div>
+      <div class="av-btn" id="redeem-av" onclick="goProfile()">🦊</div>
+    </div>
+  </nav>
+  <div class="redeem-hero">
+    <h1>Redeem Center 🎁</h1>
+    <p style="color:var(--lvt);font-size:13px;margin-top:4px">Tukarkan poin kamu dengan hadiah keren</p>
+    <div class="pts-big-wrap"><div class="pts-big pts-display">0</div><div class="pts-lbl">Poin Tersedia</div></div>
+  </div>
+  <div class="rtabs">
+    <button class="rtab on" id="rtab-rewards" onclick="switchRTab('rewards')">🎁 Rewards</button>
+    <button class="rtab" id="rtab-voucher" onclick="switchRTab('voucher')">🎟 Voucher</button>
+    <button class="rtab" id="rtab-history" onclick="switchRTab('history')">📋 History</button>
+  </div>
+  <div id="tab-rewards" class="rcontent">
+    <div class="cat-tabs" id="cat-tabs"></div>
+    <div class="rw-grid" id="rw-grid"></div>
+  </div>
+  <div id="tab-voucher" class="rcontent" style="display:none">
+    <div class="vbox">
+      <h3>🎟 Masukkan Kode Voucher</h3>
+      <p>Punya kode dari luar? Klaim poin bonus sekarang!</p>
+      <div class="vi-row">
+        <input class="vi" id="vi" placeholder="XXXX-XXXX" maxlength="9" oninput="fmtV(this)">
+        <button class="btn1" onclick="claimV()">Klaim</button>
+      </div>
+      <div id="vmsg" style="margin-top:10px;font-size:12px;display:none"></div>
+    </div>
+    <div class="demo-codes">
+      <div class="dtitle">💡 Demo Codes</div>
+      <div style="font-size:12px;color:var(--lvt);line-height:2.4">
+        <code>GAME-1000</code> → +1,000 pts &nbsp;
+        <code>STAR-0500</code> → +500 pts &nbsp;
+        <code>MINT-2500</code> → +2,500 pts
+      </div>
+    </div>
+  </div>
+  <div id="tab-history" class="rcontent" style="display:none">
+    <div class="hist-list" id="hist-list"><div style="color:var(--t3);font-size:13px;text-align:center;padding:32px 0">Belum ada aktivitas!</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════ PROFILE PAGE ══════════════════ -->
+<div id="page-profile" class="page">
+  <nav>
+    <div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div>
+    <div class="nav-mid">
+      <button class="nb" onclick="goHome()">Home</button>
+      <button class="nb" onclick="goShop()">🛍️ Shop</button>
+      <button class="nb" onclick="goRedeem()">Redeem</button>
+      <button class="nb on">Profile</button>
+    </div>
+    <div class="nav-right"><div class="pts-chip">🪙 <span class="pts-display">0</span></div></div>
+  </nav>
+  <div class="prof-hero">
+    <div class="av-big" id="prof-av-big" onclick="focusAvPicker()">🦊</div>
+    <div class="prof-name-h" id="prof-name-display">Player</div>
+    <div class="prof-sub">Tap avatar untuk ganti</div>
+    <div class="prof-stats">
+      <div class="pstat"><div class="pstat-n pts-display">0</div><div class="pstat-l">Poin</div></div>
+      <div class="pstat"><div class="pstat-n" id="prof-games">0</div><div class="pstat-l">Games</div></div>
+      <div class="pstat"><div class="pstat-n" id="prof-redeemed">0</div><div class="pstat-l">Ditukar</div></div>
+      <div class="pstat"><div class="pstat-n" id="prof-orders">0</div><div class="pstat-l">Pesanan</div></div>
+    </div>
+  </div>
+  <div class="prof-content" id="prof-edit-area">
+    <div class="prof-section">
+      <h3>Edit Profil</h3>
+      <div class="form-row"><label>Username</label><input class="form-input" id="prof-name-input" maxlength="18" placeholder="Username kamu..."></div>
+      <div class="form-row"><label>Avatar</label><div class="av-picker" id="prof-av-grid"></div></div>
+      <button class="btn1" style="margin-top:8px" onclick="saveProfile()">Simpan Perubahan</button>
+    </div>
+    <div class="prof-section">
+      <h3>Skor Terbaik</h3>
+      <div id="best-scores-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+var S = {
+  pts:0, name:'', av:'🦊',
+  gamesPlayed:0, redeemed:0, orders:[],
+  history:[], usedV:[],
+  bests:{snake:0,brick:0,catch:0},
+  balance:0
+};
+
+var AVLIST = ['🦊','🐺','🦁','🐯','🐻','🦅','🐸','🐼','🦄','🐲','🦋','🐬'];
+var CATS   = ['All','Digital','Physical','In-Game'];
+
+var REWARDS = [
+  {id:1,name:'Extra Life x3',icon:'❤️',pts:150,cat:'In-Game',badge:'Popular'},
+  {id:2,name:'Score Booster',icon:'⚡',pts:200,cat:'In-Game',badge:''},
+  {id:3,name:'Shield Power',icon:'🛡️',pts:300,cat:'In-Game',badge:''},
+  {id:4,name:'Pulsa 10K',icon:'📱',pts:500,cat:'Digital',badge:'Hot'},
+  {id:5,name:'Voucher Kopi',icon:'☕',pts:600,cat:'Digital',badge:''},
+  {id:6,name:'Netflix 1 Bulan',icon:'🎬',pts:1200,cat:'Digital',badge:''},
+  {id:7,name:'Spotify Premium',icon:'🎵',pts:1000,cat:'Digital',badge:''},
+  {id:8,name:'Pulsa 50K',icon:'📲',pts:2000,cat:'Digital',badge:''},
+  {id:9,name:'Tote Bag',icon:'👜',pts:800,cat:'Physical',badge:''},
+  {id:10,name:'Sticker Pack',icon:'🎨',pts:300,cat:'Physical',badge:''},
+  {id:11,name:'Notebook',icon:'📓',pts:700,cat:'Physical',badge:''},
+  {id:12,name:'Gift Card 100K',icon:'🎁',pts:3000,cat:'Physical',badge:'Premium'},
+];
+
+var TOPUP_PACKAGES = [
+  {id:1,pts:100,bonus:0,price:1000,label:'Rp 1.000'},
+  {id:2,pts:500,bonus:50,price:5000,label:'Rp 5.000'},
+  {id:3,pts:1000,bonus:150,price:10000,label:'Rp 10.000'},
+  {id:4,pts:2500,bonus:500,price:25000,label:'Rp 25.000'},
+  {id:5,pts:5000,bonus:1000,price:50000,label:'Rp 50.000'},
+  {id:6,pts:10000,bonus:3000,price:100000,label:'Rp 100.000'},
+];
+
+var PAYMENT_METHODS = [
+  {id:'dana',label:'DANA',icon:'💙'},
+  {id:'ovo',label:'OVO',icon:'💜'},
+  {id:'gopay',label:'GoPay',icon:'💚'},
+  {id:'bca',label:'BCA',icon:'🏦'},
+  {id:'mandiri',label:'Mandiri',icon:'🟡'},
+  {id:'qris',label:'QRIS',icon:'📱'},
+];
+
+var MERCH = [
+  {id:1,name:'ArcadeHub T-Shirt',icon:'👕',bg:'#FFF0F4',desc:'Kaos eksklusif ArcadeHub. Material katun combed 30s.',price:89000,pts:800,variants:['S','M','L','XL'],stock:50,badge:'Bestseller'},
+  {id:2,name:'Tote Bag Canvas',icon:'👜',bg:'#EEE9FF',desc:'Tote bag canvas tebal dengan logo ArcadeHub.',price:65000,pts:600,variants:[],stock:30,badge:''},
+  {id:3,name:'Sticker Pack',icon:'🎨',bg:'#E8F7F0',desc:'12 stiker eksklusif karakter ArcadeHub.',price:25000,pts:250,variants:[],stock:100,badge:'Hot'},
+  {id:4,name:'Mug Arcade',icon:'☕',bg:'#FFF8E8',desc:'Mug keramik 350ml motif pixel art.',price:75000,pts:700,variants:['Putih','Hitam'],stock:25,badge:''},
+  {id:5,name:'Cap Snapback',icon:'🧢',bg:'#F0F8FF',desc:'Topi snapback adjustable bahan premium.',price:120000,pts:1100,variants:['Hitam','Putih','Pink'],stock:20,badge:'New'},
+  {id:6,name:'Hoodie ArcadeHub',icon:'🧥',bg:'#FFF0F4',desc:'Hoodie fleece nyaman untuk gaming seharian.',price:199000,pts:1800,variants:['S','M','L','XL'],stock:15,badge:'Premium'},
+];
+
+var VCODES   = {'GAME-1000':1000,'STAR-0500':500,'MINT-2500':2500};
+var curGame  = null, gRunning = false, gPaused = false, gLoop = null;
+var curCat   = 'All';
+var setupAvIdx = 0;
+var holdKeys   = {left:false,right:false};
+var snakeDirFn = null;
+var selTopup   = null, selMethod = null;
+var selMerchVar = {};
+var confirmCb  = null;
+
+// ════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════
+function el(id){return document.getElementById(id);}
+function rp(n){return 'Rp '+n.toLocaleString('id-ID');}
+
+function updateAll(){
+  document.querySelectorAll('.pts-display').forEach(function(e){e.textContent=S.pts.toLocaleString('id-ID');});
+  ['nav-av','game-av','redeem-av','shop-av','prof-av-big'].forEach(function(id){if(el(id))el(id).textContent=S.av;});
+  el('my-lb-av').textContent=S.av;
+  el('my-lb-name').textContent=S.name||'You';
+  el('my-lb-pts').textContent=S.pts.toLocaleString('id-ID')+' pts';
+  if(S.pts>0||S.gamesPlayed>0)el('my-lb-row').style.display='flex';
+  el('prof-name-display').textContent=S.name||'Player';
+  el('prof-games').textContent=S.gamesPlayed;
+  el('prof-redeemed').textContent=S.redeemed;
+  el('prof-orders').textContent=S.orders.length;
+  if(el('shop-balance-rp'))el('shop-balance-rp').textContent=rp(S.balance);
+  renderBestScores();
+  renderRewards();
+  saveLocal();
+}
+function addPts(n){S.pts+=n;updateAll();}
+
+function toast(msg,isErr){
+  var t=el('toast'); el('tmsg').textContent=msg;
+  el('tdot').style.background=isErr?'#E24B4A':'#5DBFA0';
+  t.classList.add('show'); clearTimeout(t._t);
+  t._t=setTimeout(function(){t.classList.remove('show');},2800);
+}
+
+// ════════════════════════════════════════════════
+// LOCAL STORAGE
+// ════════════════════════════════════════════════
+function saveLocal(){try{localStorage.setItem('arcadehub_v3',JSON.stringify(S));}catch(e){}}
+function loadLocal(){
+  try{var d=localStorage.getItem('arcadehub_v3');if(d){Object.assign(S,JSON.parse(d));return true;}}catch(e){}
+  return false;
+}
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});
+  el('page-'+p).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome(){
+  if(gRunning){gPaused=true;clearInterval(gLoop);}
+  showPage('home');
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('on');});
+  if(el('nb-home'))el('nb-home').classList.add('on');
+}
+function goShop(){showPage('shop');renderShop();}
+function goRedeem(){showPage('redeem');renderRewards();renderHist();}
+function goProfile(){
+  showPage('profile');
+  renderAvGrid('prof-av-grid');
+  el('prof-name-input').value=S.name;
+}
+
+// ════════════════════════════════════════════════
+// MODAL
+// ════════════════════════════════════════════════
+function closeModal(){el('overlay').classList.remove('show');}
+function showModal(pts,title,desc,againFn){
+  el('m-pts').textContent=pts>0?'+'+pts.toLocaleString('id-ID'):'';
+  el('m-title').textContent=title; el('m-desc').textContent=desc;
+  el('m-home').onclick=function(){closeModal();goHome();};
+  el('m-again').onclick=function(){closeModal();againFn();};
+  el('overlay').classList.add('show');
+}
+function closeConfirm(){el('confirm-overlay').classList.remove('show');confirmCb=null;}
+function showConfirm(icon,name,sub,desc,cb){
+  el('conf-icon').textContent=icon; el('conf-name').textContent=name;
+  el('conf-sub').textContent=sub; el('conf-desc').textContent=desc;
+  el('conf-ok').onclick=function(){closeConfirm();cb();};
+  el('confirm-overlay').classList.add('show');
+}
+
+// ════════════════════════════════════════════════
+// SETUP
+// ════════════════════════════════════════════════
+function initSetup(){
+  var g=el('setup-av-grid');
+  g.innerHTML=AVLIST.map(function(av,i){
+    return '<div class="av-opt'+(i===0?' sel':'')+'" onclick="setupPickAv(this,\''+av+'\','+i+')">'+av+'</div>';
+  }).join('');
+  el('setup-av-big').textContent=AVLIST[0]; S.av=AVLIST[0];
+  el('setup-av-big').onclick=cycleSetupAv;
+  el('setup-submit').onclick=finishSetup;
+  el('setup-name').addEventListener('keydown',function(e){if(e.key==='Enter')finishSetup();});
+}
+function cycleSetupAv(){
+  setupAvIdx=(setupAvIdx+1)%AVLIST.length; S.av=AVLIST[setupAvIdx];
+  el('setup-av-big').textContent=S.av;
+  document.querySelectorAll('#setup-av-grid .av-opt').forEach(function(e,i){e.classList.toggle('sel',i===setupAvIdx);});
+}
+function setupPickAv(elem,av,idx){
+  setupAvIdx=idx; S.av=av; el('setup-av-big').textContent=av;
+  document.querySelectorAll('#setup-av-grid .av-opt').forEach(function(e){e.classList.remove('sel');});
+  elem.classList.add('sel');
+}
+function finishSetup(){
+  var n=el('setup-name').value.trim();
+  if(!n){el('setup-err').style.display='block';el('setup-name').focus();return;}
+  el('setup-err').style.display='none';
+  S.name=n; el('setup-overlay').style.display='none';
+  updateAll(); toast('Selamat datang, '+S.name+'! 🎮');
+}
+
+// ════════════════════════════════════════════════
+// AVATAR & PROFILE
+// ════════════════════════════════════════════════
+function renderAvGrid(id){
+  var g=el(id);if(!g)return;
+  g.innerHTML=AVLIST.map(function(av){
+    return '<div class="av-opt'+(S.av===av?' sel':'')+'" onclick="pickAv(\''+av+'\',\''+id+'\')">'+av+'</div>';
+  }).join('');
+}
+function pickAv(av,gridId){
+  S.av=av; updateAll();
+  document.querySelectorAll('#'+gridId+' .av-opt').forEach(function(e){e.classList.toggle('sel',e.textContent===av);});
+}
+function focusAvPicker(){el('prof-edit-area').scrollIntoView({behavior:'smooth'});}
+function saveProfile(){
+  var n=el('prof-name-input').value.trim();
+  if(!n){toast('Masukkan username dulu!',true);return;}
+  S.name=n; updateAll(); toast('Profil tersimpan! ✨');
+}
+function renderBestScores(){
+  var e=el('best-scores-list');if(!e)return;
+  var games=[{key:'snake',icon:'🐍',name:'Snake Classic'},{key:'brick',icon:'🧱',name:'Brick Breaker'},{key:'catch',icon:'⭐',name:'Star Catcher'}];
+  e.innerHTML=games.map(function(g){
+    var val=S.bests[g.key]>0?S.bests[g.key]+' pts':'—';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd)"><span style="font-size:18px">'+g.icon+'</span><span style="flex:1;font-size:13px;color:var(--t2)">'+g.name+'</span><span style="font-size:14px;font-weight:700;color:var(--mtt)">'+val+'</span></div>';
+  }).join('');
+}
+
+// ════════════════════════════════════════════════
+// REWARDS
+// ════════════════════════════════════════════════
+var BADGE_COLORS={Hot:'background:#FAECE7;color:#993C1D',Popular:'background:#E8F7F0;color:#085041',Premium:'background:#EEE9FF;color:#3C3489',Bestseller:'background:#FAC775;color:#412402',New:'background:#DDD8F8;color:#3C3489'};
+function renderRewards(){
+  var gt=el('cat-tabs');if(!gt)return;
+  gt.innerHTML=CATS.map(function(c){return '<button class="ctab'+(curCat===c?' on':'')+'" onclick="setCat(\''+c+'\')">'+c+'</button>';}).join('');
+  var gg=el('rw-grid');if(!gg)return;
+  var list=curCat==='All'?REWARDS:REWARDS.filter(function(r){return r.cat===curCat;});
+  gg.innerHTML=list.map(function(r){
+    var can=S.pts>=r.pts;
+    var badge=r.badge?'<div class="rw-badge" style="'+(BADGE_COLORS[r.badge]||'')+'">'+r.badge+'</div><br>':'';
+    return '<div class="rw"><div class="rw-icon">'+r.icon+'</div>'+badge+'<div class="rw-name">'+r.name+'</div><div class="rw-cat">'+r.cat+'</div><div class="rw-pts">'+r.pts.toLocaleString('id-ID')+' pts</div><button class="rw-btn '+(can?'ok':'no')+'" onclick="doRedeem('+r.id+')">'+(can?'Redeem':'Butuh '+r.pts.toLocaleString('id-ID'))+'</button></div>';
+  }).join('');
+}
+function setCat(c){curCat=c;renderRewards();}
+function doRedeem(id){
+  var r=REWARDS.find(function(x){return x.id===id;});
+  if(!r||S.pts<r.pts)return;
+  showConfirm(r.icon,r.name,r.pts.toLocaleString('id-ID')+' pts','Kamu akan menukarkan '+r.pts.toLocaleString('id-ID')+' poin untuk mendapatkan '+r.name+'.',function(){
+    S.pts-=r.pts; S.redeemed++;
+    S.history.unshift({tp:'redeem',icon:r.icon,title:'Redeemed: '+r.name,pts:'-'+r.pts.toLocaleString('id-ID'),date:new Date().toLocaleDateString('id-ID')});
+    updateAll(); renderHist(); toast('🎉 '+r.name+' berhasil ditukar!');
+  });
+}
+
+// ════════════════════════════════════════════════
+// VOUCHER
+// ════════════════════════════════════════════════
+function fmtV(elem){var v=elem.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase();if(v.length>4)v=v.slice(0,4)+'-'+v.slice(4,8);elem.value=v;}
+function claimV(){
+  var code=el('vi').value.toUpperCase().trim();
+  var msg=el('vmsg'); msg.style.display='block';
+  if(S.usedV.includes(code)){msg.style.color='#A32D2D';msg.textContent='❌ Kode sudah pernah digunakan.';return;}
+  if(VCODES[code]){
+    var pts=VCODES[code]; addPts(pts); S.usedV.push(code); el('vi').value='';
+    S.history.unshift({tp:'voucher',icon:'🎟',title:'Voucher: '+code,pts:'+'+pts.toLocaleString('id-ID'),date:new Date().toLocaleDateString('id-ID')});
+    renderHist(); msg.style.color='#085041'; msg.textContent='✅ +'+pts.toLocaleString('id-ID')+' poin ditambahkan!';
+    toast('🎟 Voucher berhasil! +'+pts+' pts');
+  }else{msg.style.color='#A32D2D';msg.textContent='❌ Kode tidak valid.';}
+}
+
+// ════════════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════════════
+function switchRTab(tab){
+  ['rewards','voucher','history'].forEach(function(t){
+    el('tab-'+t).style.display=t===tab?'block':'none';
+    el('rtab-'+t).classList.toggle('on',t===tab);
+  });
+  if(tab==='history')renderHist();
+}
+function renderHist(){
+  var e=el('hist-list');if(!e)return;
+  if(!S.history.length){e.innerHTML='<div style="color:var(--t3);font-size:13px;text-align:center;padding:40px 0">Belum ada aktivitas!</div>';return;}
+  e.innerHTML=S.history.map(function(h){
+    var earn=h.pts.startsWith('+');
+    return '<div class="hi"><div class="hi-icon" style="background:'+(earn?'var(--mt)':'var(--lv)')+'">'+h.icon+'</div><div class="hi-text"><div class="hi-title">'+h.title+'</div><div class="hi-date">'+h.date+'</div></div><div class="hi-pts" style="color:'+(earn?'var(--mtt)':'var(--lvt)')+'">'+h.pts+'</div></div>';
+  }).join('');
+}
+
+// ════════════════════════════════════════════════
+// SHOP — TOPUP
+// ════════════════════════════════════════════════
+function renderShop(){
+  renderTopup(); renderMerch(); renderOrders();
+  if(el('shop-balance-rp'))el('shop-balance-rp').textContent=rp(S.balance);
+}
+function switchShopTab(tab){
+  ['topup','merch','orders'].forEach(function(t){
+    el('stab-'+t+'-content').style.display=t===tab?'block':'none';
+    el('stab-'+t).classList.toggle('on',t===tab);
+  });
+}
+function renderTopup(){
+  var g=el('topup-grid');if(!g)return;
+  g.innerHTML=TOPUP_PACKAGES.map(function(p){
+    var isSel=selTopup&&selTopup.id===p.id;
+    var bonus=p.bonus>0?'<div class="topup-bonus">+'+p.bonus+' bonus</div>':'';
+    return '<div class="topup-card'+(isSel?' selected':'')+'" onclick="selectTopup('+p.id+')">'
+      +'<div class="topup-pts">'+p.pts.toLocaleString('id-ID')+'</div>'
+      +'<div class="topup-pts-lbl">poin</div>'
+      +'<div class="topup-price">'+p.label+'</div>'
+      +bonus+'</div>';
+  }).join('');
+  var mg=el('method-grid');if(!mg)return;
+  mg.innerHTML=PAYMENT_METHODS.map(function(m){
+    var isSel=selMethod&&selMethod.id===m.id;
+    return '<div class="method-opt'+(isSel?' sel':'')+'" onclick="selectMethod(\''+m.id+'\')"><span class="method-icon">'+m.icon+'</span>'+m.label+'</div>';
+  }).join('');
+  updateTopupSummary();
+}
+function selectTopup(id){
+  selTopup=TOPUP_PACKAGES.find(function(p){return p.id===id;})||null;
+  renderTopup();
+}
+function selectMethod(id){
+  selMethod=PAYMENT_METHODS.find(function(m){return m.id===id;})||null;
+  renderTopup();
+}
+function updateTopupSummary(){
+  var s=el('topup-summary'), b=el('topup-btn');
+  if(!s||!b)return;
+  if(selTopup&&selMethod){
+    s.style.display='block'; b.style.display='block';
+    el('sum-pts').textContent=selTopup.pts.toLocaleString('id-ID')+' pts';
+    el('sum-bonus').textContent=selTopup.bonus>0?'+'+selTopup.bonus+' pts':'Tidak ada';
+    el('sum-method').textContent=selMethod.label;
+    el('sum-total').textContent=rp(selTopup.price);
+  }else{s.style.display='none';b.style.display='none';}
+}
+function doTopup(){
+  if(!selTopup||!selMethod){toast('Pilih nominal dan metode dulu!',true);return;}
+  var total=selTopup.pts+selTopup.bonus;
+  showConfirm('💳','Topup '+selTopup.pts.toLocaleString('id-ID')+' Poin',rp(selTopup.price)+' via '+selMethod.label,'Poin akan langsung masuk ke akunmu setelah pembayaran dikonfirmasi.',function(){
+    addPts(total);
+    S.history.unshift({tp:'topup',icon:'💳',title:'Topup via '+selMethod.label,pts:'+'+total.toLocaleString('id-ID'),date:new Date().toLocaleDateString('id-ID')});
+    S.orders.unshift({type:'topup',icon:'💳',name:'Topup '+selTopup.pts.toLocaleString('id-ID')+' Poin',sub:'via '+selMethod.label+' — '+rp(selTopup.price),date:new Date().toLocaleDateString('id-ID'),status:'✅ Berhasil'});
+    updateAll(); renderHist(); renderOrders();
+    selTopup=null; selMethod=null; renderTopup();
+    toast('🎉 Topup berhasil! +'+total.toLocaleString('id-ID')+' pts');
+  });
+}
+
+// ════════════════════════════════════════════════
+// SHOP — MERCH
+// ════════════════════════════════════════════════
+function renderMerch(){
+  var g=el('merch-grid');if(!g)return;
+  g.innerHTML=MERCH.map(function(m){
+    var badge=m.badge?'<div class="merch-badge" style="'+(BADGE_COLORS[m.badge]||'background:var(--lv);color:var(--lvt)')+'">'+m.badge+'</div>':'';
+    var vars=m.variants.length?'<div class="merch-var">'+m.variants.map(function(v){
+      var isSel=selMerchVar[m.id]===v;
+      return '<div class="var-opt'+(isSel?' sel':'')+'" onclick="selectVar('+m.id+',\''+v+'\')">'+v+'</div>';
+    }).join('')+'</div>':'';
+    var canPts=S.pts>=m.pts;
+    return '<div class="merch-card">'
+      +'<div class="merch-img" style="background:'+m.bg+'">'+m.icon+'</div>'
+      +'<div class="merch-body">'+badge
+      +'<div class="merch-name">'+m.name+'</div>'
+      +'<div class="merch-desc">'+m.desc+'</div>'
+      +'<div class="merch-price-row"><span class="merch-price">'+rp(m.price)+'</span><span class="merch-pts">'+m.pts.toLocaleString('id-ID')+' pts</span></div>'
+      +'<div class="merch-stock">Stok: '+m.stock+'</div>'
+      +vars
+      +'<button class="merch-btn cash" onclick="buyMerch('+m.id+',\'cash\')">🛒 Beli '+rp(m.price)+'</button>'
+      +'<button class="merch-btn pts" onclick="buyMerch('+m.id+',\'pts\')">'+(canPts?'🪙 Tukar '+m.pts.toLocaleString('id-ID')+' pts':'🔒 Butuh '+m.pts.toLocaleString('id-ID')+' pts')+'</button>'
+      +'</div></div>';
+  }).join('');
+}
+function selectVar(mid,v){
+  selMerchVar[mid]=v; renderMerch();
+}
+function buyMerch(id,method){
+  var m=MERCH.find(function(x){return x.id===id;});
+  if(!m)return;
+  if(m.variants.length&&!selMerchVar[m.id]){toast('Pilih ukuran/warna dulu!',true);return;}
+  if(method==='pts'&&S.pts<m.pts){toast('Poin tidak cukup!',true);return;}
+  var varLabel=selMerchVar[m.id]?(' — '+selMerchVar[m.id]):'';
+  var payLabel=method==='pts'?(m.pts.toLocaleString('id-ID')+' pts'):(rp(m.price)+' (bayar di kasir)');
+  showConfirm(m.icon,m.name,payLabel,'Item akan diproses dan dikirim dalam 3-5 hari kerja.',function(){
+    if(method==='pts'){S.pts-=m.pts;}
+    S.orders.unshift({type:'merch',icon:m.icon,name:m.name+varLabel,sub:'Bayar: '+payLabel,date:new Date().toLocaleDateString('id-ID'),status:'📦 Diproses'});
+    S.history.unshift({tp:'order',icon:m.icon,title:'Beli: '+m.name,pts:method==='pts'?('-'+m.pts.toLocaleString('id-ID')):(rp(m.price)),date:new Date().toLocaleDateString('id-ID')});
+    if(m.stock>0)m.stock--;
+    updateAll(); renderMerch(); renderOrders();
+    toast('🛍️ Pesanan '+m.name+' berhasil!');
+  });
+}
+
+// ════════════════════════════════════════════════
+// ORDERS
+// ════════════════════════════════════════════════
+function renderOrders(){
+  var e=el('orders-list');if(!e)return;
+  if(!S.orders.length){e.innerHTML='<div style="color:var(--t3);font-size:13px;text-align:center;padding:40px 0">Belum ada pesanan</div>';return;}
+  e.innerHTML=S.orders.map(function(o){
+    return '<div class="hi"><div class="hi-icon" style="background:var(--mt)">'+o.icon+'</div><div class="hi-text"><div class="hi-title">'+o.name+'</div><div class="hi-date">'+o.sub+' · '+o.date+'</div></div><div style="font-size:12px;color:var(--t2)">'+o.status+'</div></div>';
+  }).join('');
+}
+
+// ════════════════════════════════════════════════
+// GAME ENGINE
+// ════════════════════════════════════════════════
+function startGame(type){
+  curGame=type; showPage('game');
+  var titles={snake:'🐍 Snake Classic',brick:'🧱 Brick Breaker',catch:'⭐ Star Catcher'};
+  el('gtitle').textContent=titles[type];
+  el('best-score').textContent=S.bests[type];
+  el('live-score').textContent=0;
+  el('btn-start').style.display='inline-block';
+  el('btn-pause').style.display='none';
+  clearInterval(gLoop); gRunning=false; gPaused=false;
+  var cv=el('gc'), ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,320,320);
+  ctx.fillStyle='#F9F5FF'; ctx.fillRect(0,0,320,320);
+  ctx.fillStyle='#9F96D8'; ctx.font='16px system-ui'; ctx.textAlign='center';
+  ctx.fillText('Tekan Start!',160,160);
+  var dpad=el('dpad-wrap'), slide=el('slide-wrap');
+  if(type==='snake'){dpad.style.display='grid';slide.style.display='none';}
+  else{dpad.style.display='none';slide.style.display='flex';}
+}
+function startNow(){
+  el('btn-start').style.display='none';
+  el('btn-pause').style.display='inline-block';
+  gRunning=true; gPaused=false;
+  if(curGame==='snake')initSnake();
+  else if(curGame==='brick')initBrick();
+  else initCatch();
+}
+function togglePause(){
+  gPaused=!gPaused;
+  el('btn-pause').textContent=gPaused?'▶ Resume':'⏸ Pause';
+}
+function leaveGame(){
+  clearInterval(gLoop); gRunning=false;
+  document.onkeydown=null; document.onkeyup=null;
+  goHome();
+}
+function gameOver(score){
+  clearInterval(gLoop); gRunning=false;
+  document.onkeydown=null; document.onkeyup=null;
+  var earned=Math.floor(score*2);
+  if(score>S.bests[curGame])S.bests[curGame]=score;
+  S.gamesPlayed++; addPts(earned);
+  S.history.unshift({tp:'earn',icon:'🎮',title:'Game: '+el('gtitle').textContent,pts:'+'+earned.toLocaleString('id-ID'),date:new Date().toLocaleDateString('id-ID')});
+  var g=curGame;
+  showModal(earned,'Game Over!','Skor: '+score+' — Kamu mendapat '+earned.toLocaleString('id-ID')+' poin!',function(){startGame(g);});
+}
+
+// ════════════════════════════════════════════════
+// TOUCH & KEYBOARD
+// ════════════════════════════════════════════════
+function bindControls(){
+  function snakeMove(dir){if(!gRunning||gPaused)return;if(snakeDirFn)snakeDirFn(dir);}
+  ['up','down','left','right'].forEach(function(d){
+    var b=el('tc-'+d);
+    b.addEventListener('click',function(){snakeMove(d);});
+    b.addEventListener('touchstart',function(e){e.preventDefault();snakeMove(d);},{passive:false});
+  });
+  function setH(dir,state){holdKeys[dir]=state;}
+  var sl=el('tc-sleft'), sr=el('tc-sright');
+  sl.addEventListener('mousedown',function(){setH('left',true);});
+  sl.addEventListener('mouseup',function(){setH('left',false);});
+  sl.addEventListener('mouseleave',function(){setH('left',false);});
+  sl.addEventListener('touchstart',function(e){e.preventDefault();setH('left',true);},{passive:false});
+  sl.addEventListener('touchend',function(){setH('left',false);});
+  sr.addEventListener('mousedown',function(){setH('right',true);});
+  sr.addEventListener('mouseup',function(){setH('right',false);});
+  sr.addEventListener('mouseleave',function(){setH('right',false);});
+  sr.addEventListener('touchstart',function(e){e.preventDefault();setH('right',true);},{passive:false});
+  sr.addEventListener('touchend',function(){setH('right',false);});
+}
+
+// ════════════════════════════════════════════════
+// SNAKE
+// ════════════════════════════════════════════════
+function initSnake(){
+  var sz=16,cols=20,rows=20;
+  var snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+  var dir={x:1,y:0},nd={x:1,y:0};
+  var food=rndF(snake); var score=0;
+  function rndF(s){var f;do{f={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)};}while(s.some(function(p){return p.x===f.x&&p.y===f.y;}));return f;}
+  snakeDirFn=function(d){var m={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};if(m[d]&&!(m[d].x===-dir.x&&m[d].y===-dir.y))nd=m[d];};
+  document.onkeydown=function(e){var m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};if(m[e.key]){snakeDirFn(m[e.key]);e.preventDefault();}};
+  function draw(){
+    var cv=el('gc'),ctx=cv.getContext('2d'),off=(320-cols*sz)/2;
+    ctx.clearRect(0,0,320,320);ctx.fillStyle='#FDF8FD';ctx.fillRect(0,0,320,320);
+    ctx.fillStyle='#F0EAFE';
+    for(var i=0;i<cols;i++)for(var j=0;j<rows;j++)if((i+j)%2===0)ctx.fillRect(off+i*sz,off+j*sz,sz,sz);
+    snake.forEach(function(p,i){ctx.fillStyle=i===0?'#D4537E':'#F4C0D1';ctx.beginPath();ctx.roundRect(off+p.x*sz+1,off+p.y*sz+1,sz-2,sz-2,3);ctx.fill();});
+    ctx.fillStyle='#5DBFA0';ctx.beginPath();ctx.arc(off+food.x*sz+sz/2,off+food.y*sz+sz/2,sz/2-2,0,Math.PI*2);ctx.fill();
+  }
+  function step(){
+    if(gPaused)return; dir=nd;
+    var h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+    if(h.x<0||h.x>=cols||h.y<0||h.y>=rows||snake.some(function(p){return p.x===h.x&&p.y===h.y;})){gameOver(score);return;}
+    snake.unshift(h);
+    if(h.x===food.x&&h.y===food.y){score+=10;el('live-score').textContent=score;food=rndF(snake);}else snake.pop();
+    draw();
+  }
+  draw(); clearInterval(gLoop); gLoop=setInterval(step,140);
+}
+
+// ════════════════════════════════════════════════
+// BRICK BREAKER
+// ════════════════════════════════════════════════
+function initBrick(){
+  var W=320,H=320;
+  var pad={x:W/2-32,w:64,h:10,y:H-26,sp:5};
+  var ball={x:W/2,y:H-48,r:7,vx:2.5,vy:-2.5};
+  var bw=33,bh=11,bg=3,bo=7,br=5,bc=8;
+  var bclrs=['#F7C4D4','#DDD8F8','#C8EEE0','#F4C0D1','#CECBF6'];
+  var bricks=[];
+  for(var r=0;r<br;r++)for(var b=0;b<bc;b++)bricks.push({x:bo+b*(bw+bg),y:26+r*(bh+bg),alive:true,pts:br-r});
+  var score=0,keys={};
+  document.onkeydown=function(e){keys[e.key]=true;if(['ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault();};
+  document.onkeyup=function(e){keys[e.key]=false;};
+  function draw(){
+    var ctx=el('gc').getContext('2d');ctx.clearRect(0,0,W,H);ctx.fillStyle='#FDF8FD';ctx.fillRect(0,0,W,H);
+    bricks.forEach(function(b,i){if(!b.alive)return;ctx.fillStyle=bclrs[Math.floor(i/bc)%5];ctx.beginPath();ctx.roundRect(b.x,b.y,bw,bh,2);ctx.fill();});
+    ctx.fillStyle='#C4BCE8';ctx.beginPath();ctx.roundRect(pad.x,pad.y,pad.w,pad.h,5);ctx.fill();
+    ctx.fillStyle='#5DBFA0';ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();
+  }
+  function step(){
+    if(gPaused)return;
+    if(keys['ArrowLeft']||holdKeys['left'])pad.x=Math.max(0,pad.x-pad.sp);
+    if(keys['ArrowRight']||holdKeys['right'])pad.x=Math.min(W-pad.w,pad.x+pad.sp);
+    ball.x+=ball.vx; ball.y+=ball.vy;
+    if(ball.x-ball.r<0||ball.x+ball.r>W)ball.vx*=-1;
+    if(ball.y-ball.r<0)ball.vy*=-1;
+    if(ball.y+ball.r>pad.y&&ball.y<pad.y+pad.h+ball.r&&ball.x>pad.x&&ball.x<pad.x+pad.w){ball.vy=-Math.abs(ball.vy);ball.vx+=((ball.x-(pad.x+pad.w/2))/pad.w)*1.5;}
+    if(ball.y>H+20){gameOver(score);return;}
+    bricks.forEach(function(b){
+      if(!b.alive)return;
+      if(ball.x>b.x&&ball.x<b.x+bw&&ball.y-ball.r<b.y+bh&&ball.y+ball.r>b.y){b.alive=false;ball.vy*=-1;score+=b.pts*10;el('live-score').textContent=score;}
+    });
+    if(bricks.every(function(b){return !b.alive;})){
+      clearInterval(gLoop);gRunning=false;
+      var e=Math.floor(score*2);S.gamesPlayed++;addPts(e);
+      S.history.unshift({tp:'earn',icon:'🧱',title:'Brick Breaker — Clear!',pts:'+'+e.toLocaleString('id-ID'),date:new Date().toLocaleDateString('id-ID')});
+      var g=curGame;showModal(e,'Menang! 🎉','Semua bata hancur! Skor: '+score,function(){startGame(g);});
+    }
+    draw();
+  }
+  draw(); clearInterval(gLoop); gLoop=setInterval(step,16);
+}
+
+// ════════════════════════════════════════════════
+// STAR CATCHER
+// ════════════════════════════════════════════════
+function initCatch(){
+  var W=320,H=320;
+  var basket={x:W/2-35,w:70,h:16,y:H-26,sp:5};
+  var stars=[],bombs=[],score=0,lives=3,keys={};
+  document.onkeydown=function(e){keys[e.key]=true;if(['ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault();};
+  document.onkeyup=function(e){keys[e.key]=false;};
+  function draw(){
+    var ctx=el('gc').getContext('2d');ctx.clearRect(0,0,W,H);ctx.fillStyle='#F5F0FF';ctx.fillRect(0,0,W,H);
+    for(var i=0;i<3;i++){ctx.font='14px system-ui';ctx.fillStyle=i<lives?'#D4537E':'#D3D1C7';ctx.fillText('❤',8+i*20,18);}
+    ctx.fillStyle='#888780';ctx.font='12px system-ui';ctx.textAlign='right';ctx.fillText('Score: '+score,W-8,18);ctx.textAlign='left';
+    stars.forEach(function(s){ctx.font='17px system-ui';ctx.fillText('⭐',s.x-8,s.y);});
+    bombs.forEach(function(b){ctx.font='17px system-ui';ctx.fillText('💣',b.x-8,b.y);});
+    ctx.fillStyle='#C4BCE8';ctx.beginPath();ctx.roundRect(basket.x,basket.y,basket.w,basket.h,7);ctx.fill();
+    ctx.fillStyle='#9F96D8';ctx.beginPath();ctx.roundRect(basket.x+5,basket.y-4,basket.w-10,7,3);ctx.fill();
+  }
+  function step(){
+    if(gPaused)return;
+    if(keys['ArrowLeft']||holdKeys['left'])basket.x=Math.max(0,basket.x-basket.sp);
+    if(keys['ArrowRight']||holdKeys['right'])basket.x=Math.min(W-basket.w,basket.x+basket.sp);
+    if(Math.random()<0.05)stars.push({x:Math.random()*(W-20)+10,y:-10,vy:2+Math.random()*2});
+    if(Math.random()<0.02)bombs.push({x:Math.random()*(W-20)+10,y:-10,vy:2.5+Math.random()*2});
+    stars.forEach(function(s){s.y+=s.vy;}); bombs.forEach(function(b){b.y+=b.vy;});
+    stars=stars.filter(function(s){if(s.y>basket.y&&s.y<basket.y+28&&s.x>basket.x&&s.x<basket.x+basket.w){score+=10;el('live-score').textContent=score;return false;}return s.y<H+20;});
+    bombs=bombs.filter(function(b){if(b.y>basket.y&&b.y<basket.y+28&&b.x>basket.x&&b.x<basket.x+basket.w){lives--;if(lives<=0){gameOver(score);return false;}return false;}return b.y<H+20;});
+    draw();
+  }
+  draw(); clearInterval(gLoop); gLoop=setInterval(step,16);
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+(function init(){
+  var hasSave=loadLocal();
+  bindControls();
+  if(hasSave&&S.name){
+    el('setup-overlay').style.display='none';
+    updateAll();
+    toast('Selamat datang kembali, '+S.name+'! 🎮');
+  }else{
+    initSetup();
+    el('setup-overlay').style.display='flex';
+  }
+})();
+</script>
+</body>
+</html>
