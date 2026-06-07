@@ -567,19 +567,27 @@ code{background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;font-siz
 var S={pts:0,name:'',av:'🦊',gamesPlayed:0,redeemed:0,orders:[],history:[],usedV:[],bests:{snake:0,brick:0,catch:0},tournJoined:[],tournWins:0,withdrawals:[],coin:0};
 var AVLIST=['🦊','🐺','🦁','🐯','🐻','🦅','🐸','🐼','🦄','🐲','🦋','🐬'];
 var CATS=['All','Digital','Physical','In-Game'];
-var REWARDS=[
   {id:1,name:'Extra Life x3',icon:'❤️',pts:150,cat:'In-Game',badge:'Popular'},
-  {id:2,name:'Score Booster',icon:'⚡',pts:200,cat:'In-Game',badge:''},
-  {id:3,name:'Shield Power',icon:'🛡️',pts:300,cat:'In-Game',badge:''},
-  {id:4,name:'Pulsa 10K',icon:'📱',pts:500,cat:'Digital',badge:'Hot'},
-  {id:5,name:'Voucher Kopi',icon:'☕',pts:600,cat:'Digital',badge:''},
-  {id:6,name:'Netflix 1 Bulan',icon:'🎬',pts:1200,cat:'Digital',badge:''},
-  {id:7,name:'Spotify Premium',icon:'🎵',pts:1000,cat:'Digital',badge:''},
-  {id:8,name:'Pulsa 50K',icon:'📲',pts:2000,cat:'Digital',badge:''},
-  {id:9,name:'Tote Bag',icon:'👜',pts:800,cat:'Physical',badge:''},
-  {id:10,name:'Sticker Pack',icon:'🎨',pts:300,cat:'Physical',badge:''},
-  {id:11,name:'Notebook',icon:'📓',pts:700,cat:'Physical',badge:''},
-  {id:12,name:'Gift Card 100K',icon:'🎁',pts:3000,cat:'Physical',badge:'Premium'},
+  var REWARDS=[
+  {id:1,name:"Sticker Pack",icon:"🎨",cost:300,currency:"pts",cat:"Barang",badge:""},
+  {id:2,name:"Notebook",icon:"📓",cost:700,currency:"pts",cat:"Barang",badge:""},
+  {id:3,name:"Tote Bag",icon:"👜",cost:800,currency:"pts",cat:"Barang",badge:""},
+  {id:4,name:"T-Shirt ArcadeHub",icon:"👕",cost:1500,currency:"pts",cat:"Barang",badge:"Popular"},
+  {id:5,name:"Hoodie ArcadeHub",icon:"🧥",cost:3000,currency:"pts",cat:"Barang",badge:"Premium"},
+  {id:6,name:"Pulsa 10K",icon:"📱",cost:1000,currency:"coin",cat:"Digital",badge:"Hot"},
+  {id:7,name:"Pulsa 50K",icon:"📲",cost:5000,currency:"coin",cat:"Digital",badge:""},
+  {id:8,name:"Voucher Kopi",icon:"☕",cost:1500,currency:"coin",cat:"Digital",badge:""},
+  {id:9,name:"Spotify Premium",icon:"🎵",cost:10000,currency:"coin",cat:"Digital",badge:""},
+  {id:10,name:"Netflix 1 Bulan",icon:"🎬",cost:15000,currency:"coin",cat:"Digital",badge:""},
+  {id:11,name:"Gift Card 100K",icon:"🎁",cost:10000,currency:"coin",cat:"Digital",badge:"Premium"},
+  {id:12,name:"Withdraw Rp 50K",icon:"💸",cost:5000,currency:"coin",cat:"Withdraw",badge:""},
+  {id:13,name:"Withdraw Rp 100K",icon:"💰",cost:10000,currency:"coin",cat:"Withdraw",badge:""},
+];'
+$content = $content -replace $oldRewards, $newRewards
+Set-Content index.html $content -NoNewline
+Lalu cek:
+powershellSelect-String -Path index.html -Pattern "currency"
+Screenshot hasilnya!Sonnet 4.6 Low
 ];
 var TOPUP_PACKAGES=[
   {id:1,pts:100,bonus:0,price:1000,label:'Rp 1.000'},
