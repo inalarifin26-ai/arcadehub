@@ -689,10 +689,24 @@ function renderProfTournHistory(){var e=el('prof-tourn-history');if(!e)return;if
 
 function renderRewards(){
   var gt=el('cat-tabs');if(!gt)return;
-  gt.innerHTML=CATS.map(function(c){return '<button class="ctab'+(curCat===c?' on':'')+'" onclick="setCat(\''+c+'\')">'+c+'</button>';}).join('');
+  var cats=['All','Barang','Digital','Withdraw'];
+  gt.innerHTML=cats.map(function(c){return '<button class="ctab'+(curCat===c?' on':'')+'" onclick="setCat(\''+c+'\')">'+c+'</button>';}).join('');
   var gg=el('rw-grid');if(!gg)return;
   var list=curCat==='All'?REWARDS:REWARDS.filter(function(r){return r.cat===curCat;});
-  gg.innerHTML=list.map(function(r){var can=S.pts>=r.pts;var badge=r.badge?'<div class="rw-badge" style="'+(BADGE_COLORS[r.badge]||'')+'">'+r.badge+'</div><br>':'';return '<div class="rw"><div class="rw-icon">'+r.icon+'</div>'+badge+'<div class="rw-name">'+r.name+'</div><div class="rw-cat">'+r.cat+'</div><div class="rw-pts">'+r.pts.toLocaleString('id-ID')+' pts</div><button class="rw-btn '+(can?'ok':'no')+'" onclick="doRedeem('+r.id+')">'+(can?'Redeem':'Butuh '+r.pts.toLocaleString('id-ID'))+'</button></div>';}).join('');
+  gg.innerHTML=list.map(function(r){
+    var isPts=r.currency==='pts';
+    var balance=isPts?S.pts:S.coin;
+    var can=balance>=r.cost;
+    var badge=r.badge?'<div class="rw-badge" style="'+(BC[r.badge]||'')+'">'+r.badge+'</div><br>':'';
+    var currBg=isPts?'var(--lv)':'var(--mt)';
+    var currColor=isPts?'var(--lvt)':'var(--mtt)';
+    var currLabel=isPts?'🎯 pts':'🪙 coin';
+    return '<div class="rw"><div class="rw-icon">'+r.icon+'</div>'+badge
+      +'<div class="rw-name">'+r.name+'</div>'
+      +'<div class="rw-cat">'+r.cat+'</div>'
+      +'<div style="font-size:11px;margin-bottom:8px"><span style="background:'+currBg+';color:'+currColor+';padding:2px 8px;border-radius:8px;font-weight:600">'+r.cost.toLocaleString('id-ID')+' '+currLabel+'</span></div>'
+      +'<button class="rw-btn '+(can?'ok':'no')+'" onclick="doRedeem('+r.id+')">'+(can?'Redeem':'Kurang')+'</button></div>';
+  }).join('');
 }
 function setCat(c){curCat=c;renderRewards();}
 function doRedeem(id){var r=REWARDS.find(function(x){return x.id===id;});if(!r||S.pts<r.pts)return;showConfirm(r.icon,r.name,r.pts.toLocaleString('id-ID')+' pts','Kamu akan menukarkan '+r.pts.toLocaleString('id-ID')+' poin.',function(){S.pts-=r.pts;S.redeemed++;S.history.unshift({tp:'redeem',icon:r.icon,title:'Redeemed: '+r.name,pts:'-'+r.pts.toLocaleString('id-ID'),date:new Date().toLocaleDateString('id-ID')});updateAll();renderHist();toast('🎉 '+r.name+' berhasil ditukar!');});}
