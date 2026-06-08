@@ -405,7 +405,7 @@ code{background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;font-siz
 
 <!-- GAME -->
 <div id="page-game" class="page">
-  <nav><div class="nav-logo" onclick="leaveGame()"><span class="logo-badge">🎮</span> ArcadeHub</div><div class="nav-mid"><button class="nb" onclick="leaveGame()">← Kembali</button></div><div class="nav-right"><div class="pts-chip">🪙 <span class="pts-display">0</span></div><div class="av-btn" id="game-av">🦊</div></div></nav>
+  <div class="pts-chip">🎯 <span class="pts-display">0</span> pts &nbsp; 🪙 <span class="coin-display">0</span></div>
   <div style="flex:1;display:flex;flex-direction:column">
     <div class="game-header"><h2 id="gtitle">Game</h2><div class="sc-badge" style="background:var(--mt);color:var(--mtt)">Score: <span id="live-score">0</span></div><div class="sc-badge" style="background:var(--lv);color:var(--lvt)">Best: <span id="best-score">0</span></div></div>
     <div class="game-wrap"><canvas id="gc" width="320" height="320"></canvas></div>
@@ -419,7 +419,7 @@ code{background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;font-siz
 
 <!-- TOURNAMENT -->
 <div id="page-tourn" class="page">
-  <nav><div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div><div class="nav-mid"><button class="nb" onclick="goHome()">Home</button><button class="nb on">🏆 Tournament</button><button class="nb" onclick="goShop()">🛍️ Shop</button><button class="nb" onclick="goRedeem()">Redeem</button><button class="nb" onclick="goProfile()">Profile</button></div><div class="nav-right"><div class="pts-chip">🪙 <span class="pts-display">0</span></div><div class="av-btn" id="tourn-av" onclick="goProfile()">🦊</div></div></nav>
+  <div class="pts-chip">🎯 <span class="pts-display">0</span> pts &nbsp; 🪙 <span class="coin-display">0</span></div>
   <div class="tourn-hero">
     <h1>🏆 Tournament Arena</h1>
     <p>Bayar 1000 pts untuk 3x percobaan. Skor tertinggi masuk leaderboard!</p>
@@ -443,7 +443,7 @@ code{background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;font-siz
 
 <!-- SHOP -->
 <div id="page-shop" class="page">
-  <nav><div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div><div class="nav-mid"><button class="nb" onclick="goHome()">Home</button><button class="nb" onclick="goTourn()">🏆 Tournament</button><button class="nb on">🛍️ Shop</button><button class="nb" onclick="goRedeem()">Redeem</button><button class="nb" onclick="goProfile()">Profile</button></div><div class="nav-right"><div class="pts-chip">🪙 <span class="pts-display">0</span></div><div class="av-btn" id="shop-av" onclick="goProfile()">🦊</div></div></nav>
+ <div class="pts-chip">🎯 <span class="pts-display">0</span> pts &nbsp; 🪙 <span class="coin-display">0</span></div>
   <div class="shop-hero"><h1>🛍️ ArcadeHub Shop</h1><p style="color:rgba(255,255,255,0.8);font-size:13px;margin-top:4px">Topup poin & beli merchandise eksklusif</p><div class="shop-balance"><div class="shop-bal-item"><div class="shop-bal-n pts-display">0</div><div class="shop-bal-l">🪙 Poin</div></div></div></div>
   <div class="shop-tabs"><button class="stab on" id="stab-topup" onclick="switchShopTab('topup')">💳 Topup Poin</button><button class="stab" id="stab-merch" onclick="switchShopTab('merch')">👕 Merchandise</button><button class="stab" id="stab-orders" onclick="switchShopTab('orders')">📦 Pesanan</button></div>
   <div id="stab-topup-content" class="shop-content">
@@ -459,7 +459,7 @@ code{background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;font-siz
 
 <!-- REDEEM -->
 <div id="page-redeem" class="page">
-  <nav><div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div><div class="nav-mid"><button class="nb" onclick="goHome()">Home</button><button class="nb" onclick="goTourn()">🏆 Tournament</button><button class="nb" onclick="goShop()">🛍️ Shop</button><button class="nb on">Redeem</button><button class="nb" onclick="goProfile()">Profile</button></div><div class="nav-right"><div class="pts-chip">🪙 <span class="pts-display">0</span></div><div class="av-btn" id="redeem-av" onclick="goProfile()">🦊</div></div></nav>
+  <div class="pts-chip">🎯 <span class="pts-display">0</span> pts &nbsp; 🪙 <span class="coin-display">0</span></div>
   <div class="redeem-hero"><h1>Redeem Center 🎁</h1><p style="color:var(--lvt);font-size:13px;margin-top:4px">Tukarkan poin kamu dengan hadiah keren</p><div class="pts-big-wrap"><div class="pts-big pts-display">0</div><div class="pts-lbl">Poin Tersedia</div></div></div>
   <div class="rtabs"><button class="rtab on" id="rtab-rewards" onclick="switchRTab('rewards')">🎁 Rewards</button><button class="rtab" id="rtab-withdraw" onclick="switchRTab('withdraw')">💸 Withdraw</button><button class="rtab" id="rtab-voucher" onclick="switchRTab('voucher')">🎟 Voucher</button><button class="rtab" id="rtab-history" onclick="switchRTab('history')">📋 History</button></div>
   <div id="tab-rewards" class="rcontent"><div class="cat-tabs" id="cat-tabs"></div><div class="rw-grid" id="rw-grid"></div></div>
@@ -523,7 +523,7 @@ code{background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;font-siz
       <button class="nb" onclick="goProfile()">Profile</button>
     </div>
     <div class="nav-right">
-      <div class="pts-chip">🪙 <span class="pts-display">0</span></div>
+      <div class="pts-chip">🎯 <span class="pts-display">0</span> pts &nbsp; 🪙 <span class="coin-display">0</span></div>
       <div class="av-btn" id="tourn-av" onclick="goProfile()">🦊</div>
     </div>
   </nav>
@@ -550,7 +550,7 @@ code{background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:4px;font-siz
 
 <!-- PROFILE -->
 <div id="page-profile" class="page">
-  <nav><div class="nav-logo" onclick="goHome()"><span class="logo-badge">🎮</span> ArcadeHub</div><div class="nav-mid"><button class="nb" onclick="goHome()">Home</button><button class="nb" onclick="goTourn()">🏆 Tournament</button><button class="nb" onclick="goShop()">🛍️ Shop</button><button class="nb" onclick="goRedeem()">Redeem</button><button class="nb on">Profile</button></div><div class="nav-right"><div class="pts-chip">🪙 <span class="pts-display">0</span></div><button class="btn2" style="font-size:11px;padding:5px 10px" onclick="goAdmin()">⚙️ Admin</button></div></nav>
+  <div class="pts-chip">🎯 <span class="pts-display">0</span> pts &nbsp; 🪙 <span class="coin-display">0</span></div>
   <div class="prof-hero">
     <div class="av-big" id="prof-av-big" onclick="focusAvPicker()">🦊</div>
     <div class="prof-name-h" id="prof-name-display">Player</div><div class="prof-sub">Tap avatar untuk ganti</div>
@@ -619,6 +619,7 @@ function fmtTime(ms){if(ms<=0)return'Selesai';var d=Math.floor(ms/86400000),h=Ma
 
 function updateAll(){
   document.querySelectorAll('.pts-display').forEach(function(e){e.textContent=S.pts.toLocaleString('id-ID');});
+  document.querySelectorAll('.coin-display').forEach(function(e){e.textContent=S.coin.toLocaleString('id-ID');});
   ['nav-av','game-av','redeem-av','shop-av','tourn-av','prof-av-big'].forEach(function(id){if(el(id))el(id).textContent=S.av;});
   el('my-lb-av').textContent=S.av;el('my-lb-name').textContent=S.name||'You';
   el('my-lb-pts').textContent=S.pts.toLocaleString('id-ID')+' pts';
